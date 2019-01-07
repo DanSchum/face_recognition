@@ -57,7 +57,7 @@ def _trim_css_to_bounds(css, image_shape):
     return max(css[0], 0), min(css[1], image_shape[1]), min(css[2], image_shape[0]), max(css[3], 0)
 
 
-def face_distance(face_encodings, face_to_compare):
+def face_distance(face_encodings, face_to_compare, axis=0):
     """
     Given a list of face encodings, compare them to a known face encoding and get a euclidean distance
     for each comparison face. The distance tells you how similar the faces are.
@@ -69,7 +69,7 @@ def face_distance(face_encodings, face_to_compare):
     if len(face_encodings) == 0:
         return np.empty((0))
 
-    return np.linalg.norm(face_encodings - face_to_compare, axis=1)
+    return np.linalg.norm(face_encodings - face_to_compare, axis=axis)
 
 
 def load_image_file(file, mode='RGB'):
@@ -206,7 +206,7 @@ def face_encodings(face_image, known_face_locations=None, num_jitters=1):
     :param num_jitters: How many times to re-sample the face when calculating encoding. Higher is more accurate, but slower (i.e. 100 is 100x slower)
     :return: A list of 128-dimensional face encodings (one for each face in the image)
     """
-    raw_landmarks = _raw_face_landmarks(face_image, known_face_locations, model="small")
+    raw_landmarks = _raw_face_landmarks(face_image, known_face_locations, model="large")
     return [np.array(face_encoder.compute_face_descriptor(face_image, raw_landmark_set, num_jitters)) for raw_landmark_set in raw_landmarks]
 
 
