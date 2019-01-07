@@ -45,6 +45,7 @@ def run_testData(pathToFiles, listFilesTuple, outputFile):
 
             # See how far apart the test image is from the known faces
             face_distances = face_recognition.face_distance(img1_encoding, img2_encoding)
+            face_distances = abs(1-face_distances)
             outputFile.write(str(face_distances) + '\n')
         else:
             print('Face not found')
